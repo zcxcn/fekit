@@ -147,9 +147,13 @@ module.exports = ( options ) ->
                         writeHeader res , 200 , ctype
                         compiler.booster.watch module
                         compiler.booster.set_compiled_cache( srcpath , txt , is_deps )
+                        if options.weinre and /\.js$/.test module.path
+                            weinrestr=';if(!window.weinreEnjected){window.weinreEnjected=true;(function(e){e.setAttribute("src","http://localhost:'+process.env["WEINRE_PORT"]+'/target/target-script-min.js#anonymous");document.getElementsByTagName("body")[0].appendChild(e);})(document.createElement("script"));void(0);}';
+                            txt=weinrestr+txt
                         res.end txt
 
                 if utils.path.exists( srcpath )
+
                     config = new utils.config.parse( srcpath )
                     config.findExportFile srcpath , ( path , parents ) =>
                         path = srcpath if options.noexport or is_deps

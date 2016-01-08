@@ -6,6 +6,7 @@ https = require "https"
 compiler = require "../compiler/compiler"
 http_proxy = require "./_server_http_proxy"
 host_rule = require "./_server_host_rule"
+server_weinre = require "./_server_weinre"
 
 middleware = require "../middleware/index"
 
@@ -42,6 +43,9 @@ exports.set_options = ( optimist ) ->
 
     optimist.alias 'w', 'without-java'
     optimist.describe 'w', '不使用 java 编译 velocity'
+
+    optimist.alias 'i', 'weinre'
+    optimist.describe 'i', '启动weinre'
 
 setupProxyServer = ( options ) ->
 
@@ -104,3 +108,6 @@ exports.run = ( options ) ->
     setupServer( options )
 
     setupProxyServer( options )
+
+    if options.weinre
+        server_weinre.run(options)
