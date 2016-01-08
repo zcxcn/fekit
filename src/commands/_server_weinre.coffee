@@ -14,6 +14,7 @@ exports.run = (options) ->
         };
         weinreOption.deathTimeout = 3 * weinreOption.readTimeout;
         weinre.run(weinreOption)
+        process.env["WEINRE_PORT"]=port
         utils.logger.log 'weinre已启动'
 
 getPort=(callback)->
