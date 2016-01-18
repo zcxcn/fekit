@@ -104,7 +104,6 @@ module.exports = ( options ) ->
 
 
     fekitRouter = urlrouter (app) =>
-
             # PRD地址
             app.get utils.UrlConvert.PRODUCTION_REGEX , ( req , res , next ) =>
 
@@ -147,8 +146,8 @@ module.exports = ( options ) ->
                         writeHeader res , 200 , ctype
                         compiler.booster.watch module
                         compiler.booster.set_compiled_cache( srcpath , txt , is_deps )
-                        if options.weinre and /\.js$/.test module.path
-                            weinrestr=';if(!window.weinreEnjected){window.weinreEnjected=true;(function(e){e.setAttribute("src","http://localhost:'+process.env["WEINRE_PORT"]+'/target/target-script-min.js#anonymous");document.getElementsByTagName("body")[0].appendChild(e);})(document.createElement("script"));void(0);}';
+                        if options.weinre and /\.js$/.test module.path.uri
+                            weinrestr=';if(!window.weinreEnjected){window.weinreEnjected=true;(function(e){e.setAttribute("src","http://'+options.weinre+'/target/target-script-min.js#anonymous");document.getElementsByTagName("body")[0].appendChild(e);})(document.createElement("script"));void(0);}';
                             txt=weinrestr+txt
                         res.end txt
 

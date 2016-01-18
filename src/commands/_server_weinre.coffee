@@ -3,19 +3,31 @@ utils = require("../util");
 weinre = require("weinre");
 http = require("http");
 
-exports.run = (options) ->
+exports.run = (options,callback) ->
+
+    if(options.weinre.indexOf(':')>-1)
+        customAddress=options.weinre.split(':')[0]
+        customPort=options.weinre.split(':')[1]
+    else
+        logger.error 'weinre参数有误，正确示例：192.168.202.139:8081'
+        return
+
     getPort (port)->
         weinreOption = {
-            httpPort: port,
-            boundHost: '-all-',
+            httpPort: customPort || port,
+            boundHost: customAddress||'-all-',
             verbose: false,
             debug: false,
             readTimeout: 5
         };
+        process.env["WEINRE_PORT"]=port
         weinreOption.deathTimeout = 3 * weinreOption.readTimeout;
         weinre.run(weinreOption)
-        process.env["WEINRE_PORT"]=port
-        utils.logger.log 'weinre已启动'
+
+        utils.logger.log 'weinre已启动!'
+        callback(weinreOption)
+
+
 
 getPort=(callback)->
     server = http.createServer()

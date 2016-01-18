@@ -110,4 +110,6 @@ exports.run = ( options ) ->
     setupProxyServer( options )
 
     if options.weinre
-        server_weinre.run(options)
+        server_weinre.run options
+            ,(opt)->
+                 utils.logger.log 'weinre 已启动，请访问http://'+opt.boundHost+':'+opt.httpPort
